@@ -5,9 +5,7 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    public interface IHashFunc
+    public class Tree
     {
-        string Name { get; }
-        int GetHash(string item, int n);
     }
 }

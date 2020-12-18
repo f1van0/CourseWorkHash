@@ -43,17 +43,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DivisionHashFunc.cs" />
+    <Compile Include="DoubleOpenHashTable.cs" />
+    <Compile Include="ElementsStatement.cs" />
     <Compile Include="ListHashTable.cs" />
     <Compile Include="CollisionMethod.cs" />
     <Compile Include="DeepCollisionMethod.cs" />
     <Compile Include="IHashFuct.cs" />
     <Compile Include="IHashTable.cs" />
+    <Compile Include="ListItem.cs" />
     <Compile Include="MidSquareHashFunc.cs" />
     <Compile Include="MultiplicativeHashFunc.cs" />
-    <Compile Include="OpenHashTable.cs" />
+    <Compile Include="LinearOpenHashTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuadraticOpenHashTable.cs" />
     <Compile Include="TreeHashTable.cs" />
+    <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

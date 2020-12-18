@@ -7,11 +7,12 @@ namespace CourseWorkHash
 {
     public interface IHashTable
     {
-        bool Add(int item);
-        bool Delete(int item);
-        bool HasItem(int item);
-        bool HasItem(int item, out TimeSpan timeEllapsed);
-        int[] GetItems();
+        bool Add(string item);
+        bool Delete(string item);
+        bool Find(string item);
+        bool Find(string item, out TimeSpan timeEllapsed);
+        void Print();
+        string[] GetItems();
         void Clear();
 
     }

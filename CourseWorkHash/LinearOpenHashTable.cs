@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    public class OpenHashTable : IHashTable
+    public class LinearOpenHashTable : IHashTable
     {
         private int[] Values;
 

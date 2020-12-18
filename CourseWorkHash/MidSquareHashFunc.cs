@@ -5,13 +5,44 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    public class MidSquareHashFunc : IHashFuct
+    public class MidSquareHashFunc : IHashFunc
     {
-        public string Name => throw new NotImplementedException();
+        public string Name => "Метод серидины квадрата";
 
-        public int GetHash(int key)
+        public int GetHash(string item, int n)
         {
-            throw new NotImplementedException();
+            //Метод середины квадрата
+            int key = 0;
+            for (int i = 0; i < item.Length; i++)
+            {
+                key += item[i];
+            }
+
+            //Возведение получившегося числа в квадрат
+            key *= key;
+
+            int m = n;
+            int nInBytes = 0;
+            while (m != 0)
+            {
+                nInBytes++;
+                m /= 2;
+            }
+
+            int shift;
+            if (nInBytes >= 32)
+            {
+                shift = 0;
+            }
+            else
+            {
+                shift = (32 - nInBytes) / 2;
+            }
+
+
+            //Извлечение nInBytes бит из середины strInBytes
+            key >>= shift;
+            return key % n;
         }
     }
 }

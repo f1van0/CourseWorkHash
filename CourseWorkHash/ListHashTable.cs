@@ -5,20 +5,40 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    /*
+    public class ChainList
+    {
+        private string value;
+        private ChainList* child;
+
+        public string GetValue()
+        {
+            return value;
+        }
+
+        public ChainList* GetChild()
+        {
+            return child;
+        }
+    }
+    */
+
     public class ListHashTable : IHashTable
     {
-        private List<int>[] Values;
-        private IHashFuct function;
+        private List<string>[] Values;
+        private int n;
+        private IHashFunc function;
 
-        public ListHashTable(int capacity, IHashFuct func)
+        public ListHashTable(int capacity, IHashFunc func)
         {
-            Values = new List<int>[capacity];
+            n = capacity;
+            Values = new List<string>[capacity];
             function = func;
         }
 
-        public bool Add(int item)
+        public bool Add(string item)
         {
-            int index = function.GetHash(item);
+            int index = function.GetHash(item, n);
             Values[index].Add(item);
             return true;
         }
@@ -33,7 +53,7 @@ namespace CourseWorkHash
             throw new NotImplementedException();
         }
 
-        public int[] GetItems()
+        public string[] GetItems()
         {
             throw new NotImplementedException();
         }

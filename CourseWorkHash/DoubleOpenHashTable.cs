@@ -5,37 +5,9 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    class Leaf
+    public class DoubleOpenHashTable : IHashTable
     {
-        public Leaf()
-        {
-            left = null;
-            right = null;
-
-            value = 0;
-        }
-
-        public Leaf* left;
-        public Leaf* right;
-        public string value;
-    }
-
-    class BinaryTree
-    {
-        private Leaf* root;
-        private int leafsCount;
-    }
-
-    public class TreeHashTable<T> : IHashTable
-    {
-        private Tree<T>[] Elements;
-
-        TreeHashTable(int size)
-        {
-            Elements = new int[size];
-        }
-
-        public bool Add(int element)
+        public bool Add(int item)
         {
             throw new NotImplementedException();
         }

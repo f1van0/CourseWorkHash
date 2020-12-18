@@ -7,32 +7,32 @@
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CourseWorkHash.OpenHashTable">
+  <Class Name="CourseWorkHash.LinearOpenHashTable">
     <Position X="8.75" Y="2.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAIAAgAAAAAAAAAAAAAAAAAAAAEAAgAAAAAgAABAAAA=</HashCode>
-      <FileName>OpenHashTable.cs</FileName>
+      <FileName>LinearOpenHashTable.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CourseWorkHash.ListHashTable">
     <Position X="6" Y="2.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAgAAAAAAAAAAAgAAAAAAAAEAAgAAAAAgAABAAAA=</HashCode>
+      <HashCode>AAIAAgAAAAAAAAAAAgAAAAAAAAEAAgAAEAAgAABAAAA=</HashCode>
       <FileName>ListHashTable.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="CourseWorkHash.TreeHashTable">
+  <Class Name="CourseWorkHash.TreeHashTable&lt;T&gt;">
     <Position X="3.25" Y="2.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAgAAAAAAAAAAAAAAAAAAAAEAAgAAAAAgAABAAAA=</HashCode>
+      <HashCode>AAIAAgAAAAAAAAAAAAAQAAAAAAEAAgAAAAAAAABAAAA=</HashCode>
       <FileName>TreeHashTable.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.1" />
   </Class>
   <Class Name="CourseWorkHash.DivisionHashFunc">
-    <Position X="3" Y="8" Width="1.5" />
+    <Position X="2.25" Y="8" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>DivisionHashFunc.cs</FileName>
@@ -40,7 +40,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CourseWorkHash.MidSquareHashFunc">
-    <Position X="4.75" Y="8" Width="1.5" />
+    <Position X="4.25" Y="8" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>MidSquareHashFunc.cs</FileName>
@@ -48,22 +48,52 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="CourseWorkHash.MultiplicativeHashFunc">
-    <Position X="6.5" Y="8" Width="1.5" />
+    <Position X="6.25" Y="8" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>MultiplicativeHashFunc.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="CourseWorkHash.IHashTable">
-    <Position X="6" Y="0.5" Width="2.5" />
+  <Class Name="CourseWorkHash.DoubleOpenHashTable">
+    <Position X="11.5" Y="2.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAIAAgAAAAAAAAAAAAAAAAAAAAEAAgAAAAAAAABAAAA=</HashCode>
+      <FileName>DoubleOpenHashTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CourseWorkHash.QuadraticOpenHashTable">
+    <Position X="14.25" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAQAAARAAAAAAAAACAAEIAgAgEABAAAREAAA=</HashCode>
+      <FileName>QuadraticOpenHashTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CourseWorkHash.Tree">
+    <Position X="3.25" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CourseWorkHash.ListItem" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ListItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="CourseWorkHash.IHashTable">
+    <Position X="8.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAEIAgAAAAAAAABEAAA=</HashCode>
       <FileName>IHashTable.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="CourseWorkHash.IHashFuct">
-    <Position X="4.75" Y="5.75" Width="1.5" />
+  <Interface Name="CourseWorkHash.IHashFunc">
+    <Position X="4.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
       <FileName>IHashFuct.cs</FileName>
@@ -81,6 +111,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DeepCollisionMethod.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CourseWorkHash.ElementStatement">
+    <Position X="0.5" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQAEAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ElementsStatement.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Font Name="Segoe UI" Size="9" />

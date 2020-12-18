@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CourseWorkHash
 {
-    public interface IHashFunc
+    public enum ElementStatement
     {
-        string Name { get; }
-        int GetHash(string item, int n);
+        empty = 0,
+        chained,
+        occupied
     }
 }
