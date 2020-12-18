@@ -9,7 +9,7 @@ namespace CourseWorkHash
     {
         public string Name => "Метод серидины квадрата";
 
-        public int GetHash(string item, int n)
+        public int GetHash(string item, int size)
         {
             //Метод середины квадрата
             int key = 0;
@@ -21,7 +21,7 @@ namespace CourseWorkHash
             //Возведение получившегося числа в квадрат
             key *= key;
 
-            int m = n;
+            int m = size;
             int nInBytes = 0;
             while (m != 0)
             {
@@ -42,7 +42,7 @@ namespace CourseWorkHash
 
             //Извлечение nInBytes бит из середины strInBytes
             key >>= shift;
-            return key % n;
+            return key % size;
         }
     }
 }

@@ -8,6 +8,6 @@ namespace CourseWorkHash
     public interface IHashFunc
     {
         string Name { get; }
-        int GetHash(string item, int n);
+        int GetHash(string item, int size);
     }
 }

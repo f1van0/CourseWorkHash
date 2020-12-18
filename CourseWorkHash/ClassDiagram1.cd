@@ -18,18 +18,10 @@
   <Class Name="CourseWorkHash.ListHashTable">
     <Position X="6" Y="2.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAgAAAAAAAAAAAgAAAAAAAAEAAgAAEAAgAABAAAA=</HashCode>
+      <HashCode>AAIAAgAAAAAAAAAAAoAAAAAAAAEAAgAAAAAgAABAAAA=</HashCode>
       <FileName>ListHashTable.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="CourseWorkHash.TreeHashTable&lt;T&gt;">
-    <Position X="3.25" Y="2.75" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAIAAgAAAAAAAAAAAAAQAAAAAAEAAgAAAAAAAABAAAA=</HashCode>
-      <FileName>TreeHashTable.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.1" />
   </Class>
   <Class Name="CourseWorkHash.DivisionHashFunc">
     <Position X="2.25" Y="8" Width="1.75" />
@@ -66,24 +58,25 @@
   <Class Name="CourseWorkHash.QuadraticOpenHashTable">
     <Position X="14.25" Y="2.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAQAAARAAAAAAAAACAAEIAgAgEABAAAREAAA=</HashCode>
+      <HashCode>AAIAAAAAAQAAARAAAIAAAAACAAEIAgAgAABAAAREAAA=</HashCode>
       <FileName>QuadraticOpenHashTable.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="CourseWorkHash.Tree">
-    <Position X="3.25" Y="0.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Tree.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="CourseWorkHash.ListItem" Collapsed="true">
-    <Position X="0.75" Y="0.5" Width="1.5" />
+    <Position X="3.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ListItem.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="CourseWorkHash.TreeHashTable&lt;T&gt;">
+    <Position X="3.25" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAgAAAQAAAAAAAIAQAAAAAAEAAgAAAAAAAABAAAA=</HashCode>
+      <FileName>TreeHashTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.1" />
   </Class>
   <Interface Name="CourseWorkHash.IHashTable">
     <Position X="8.75" Y="0.5" Width="2.5" />

@@ -7,9 +7,9 @@ namespace CourseWorkHash
 {
     public class DivisionHashFunc : IHashFunc
     {
-        public string Name => throw new NotImplementedException();
+        public string Name => "Метод деления";
 
-        public int GetHash(string item, int n)
+        public int GetHash(string item, int size)
         {
             int value = 0;
 
@@ -18,7 +18,7 @@ namespace CourseWorkHash
                 value += item[i];
             }
 
-            return value % n;
+            return value % size;
         }
     }
 }

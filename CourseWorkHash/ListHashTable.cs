@@ -26,7 +26,7 @@ namespace CourseWorkHash
     public class ListHashTable : IHashTable
     {
         private List<string>[] Values;
-        private int n;
+        private int size;
         private IHashFunc function;
 
         public ListHashTable(int capacity, IHashFunc func)

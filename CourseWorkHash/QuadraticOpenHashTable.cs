@@ -9,12 +9,12 @@ namespace CourseWorkHash
     public class QuadraticOpenHashTable : IHashTable
     {
         private string[] elements;
+        private IHashFunc hashFunc;
         private ElementStatement[] elementsState;
         //число элементов в таблице
-        int n;
+        int size;
         //Заполненность таблицы
         int a;
-        private IHashFunc hashFunc;
 
         //            (1)       (2)          (3)
         //Hi(key) = H0(key) + (i * c1) + (i * i * c2)
@@ -29,7 +29,7 @@ namespace CourseWorkHash
             elementsState = new ElementStatement[0];
             hashFunc = new MidSquareHashFunc();
 
-            n = 0;
+            size = 0;
             a = 0;
         }
 
@@ -38,7 +38,7 @@ namespace CourseWorkHash
             elements = new string[_n];
             elementsState = new ElementStatement[_n];
             hashFunc = func;
-            n = _n;
+            size = _n;
             a = 0;
         }
 
@@ -48,7 +48,7 @@ namespace CourseWorkHash
             //Если элемента не найден, то работа по добавлению нового элемента продолжается
             if (!Find(item))
             {
-                int hashKey = hashFunc.GetHash(item, n);
+                int hashKey = hashFunc.GetHash(item, size);
 
                 //Если ячейка пуста
                 if (elementsState[hashKey] == ElementStatement.empty)
@@ -74,7 +74,7 @@ namespace CourseWorkHash
                     //Разрешение коллизии
 
                     int i = 1;
-                    int key = (hashKey + i * c1 + i * i * с2) % n;
+                    int key = (hashKey + i * c1 + i * i * с2) % size;
 
                     List<int> chainedKeys = new List<int>();
                     //Пока новый ключ не совпадет с прошлым можно подбирать новый (совпадение нового ключа со старым означает то, что начинается проход "по тому же кругу" и это значит, что не нашлась ячейка для вставки нового элемента)
@@ -102,7 +102,7 @@ namespace CourseWorkHash
                         }
 
                         i++;
-                        key = (hashKey + i * c1 + i * i * с2) % n;
+                        key = (hashKey + i * c1 + i * i * с2) % size;
                     }
 
                     return false;
@@ -117,7 +117,7 @@ namespace CourseWorkHash
         //Функция позволяет удалить заданный элемент из хеш-таблицы
         public bool Delete(string item)
         {
-            int key = hashFunc.GetHash(item, n);
+            int key = hashFunc.GetHash(item, size);
 
             if (elements[key] == item)
             {
@@ -138,7 +138,7 @@ namespace CourseWorkHash
             {
                 int hashKey = key;
                 int i = 1;
-                key = (hashKey + i * c1 + i * i * с2) % n;
+                key = (hashKey + i * c1 + i * i * с2) % size;
 
                 //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
                 while (key != hashKey)
@@ -149,7 +149,6 @@ namespace CourseWorkHash
                         if (elementsState[key] == ElementStatement.chained)
                         {
                             elements[key] = "";
-                            int checkKey = (key + (i + 1) * c1 + (i + 1) * (i + 1) * с2) % n;
                         }
                         else
                         {
@@ -162,7 +161,7 @@ namespace CourseWorkHash
                     }
 
                     i++;
-                    key = (hashKey + i * c1 + i * i * с2) % n;
+                    key = (hashKey + i * c1 + i * i * с2) % size;
                 }
 
                 return false;
@@ -205,7 +204,7 @@ namespace CourseWorkHash
         //Функция позволяет найти заданный элемент в хеш-таблице единожды
         public bool Find(string item)
         {
-            int key = hashFunc.GetHash(item, n);
+            int key = hashFunc.GetHash(item, size);
 
             if (elements[key] == item)
             {
@@ -215,7 +214,7 @@ namespace CourseWorkHash
             {
                 int hashKey = key;
                 int i = 1;
-                key = (hashKey + i * c1 + i * i * с2) % n;
+                key = (hashKey + i * c1 + i * i * с2) % size;
 
                 //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
                 while (key != hashKey)
@@ -226,7 +225,7 @@ namespace CourseWorkHash
                     }
 
                     i++;
-                    key = (hashKey + i * c1 + i * i * с2) % n;
+                    key = (hashKey + i * c1 + i * i * с2) % size;
                 }
 
                 return false;
@@ -236,7 +235,7 @@ namespace CourseWorkHash
         //Фцнкция позволяет вывести все ячейки и их содержимое на экран
         public void Print()
         {
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < size; i++)
             {
                 Console.WriteLine($"{i}. {elements[i]}");
             }
@@ -275,9 +274,9 @@ namespace CourseWorkHash
 
         public string[] GetItems()
         {
-            string[] items = new string[n];
+            string[] items = new string[size];
 
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < size; i++)
             {
                 items[i] = elements[i];
             }
