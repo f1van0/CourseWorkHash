@@ -5,17 +5,16 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    
-
     public class Leaf
     {
-        public static bool operator>(string value1, string value2)
+        public static bool operator >(Leaf leaf, string value2)
         {
             int i = 0;
-            int length1 = value1.Length;
+            string leafValue = leaf.value;
+            int length1 = leafValue.Length;
             int length2 = value2.Length;
             int minLength = Math.Min(length1, length2);
-            while (value1[i] == value2[i] && i < minLength)
+            while (leafValue[i] == value2[i] && i < minLength)
             {
                 i++;
             }
@@ -33,7 +32,7 @@ namespace CourseWorkHash
             }
             else
             {
-                if (value1[i] > value2[i])
+                if (leafValue[i] > value2[i])
                 {
                     return true;
                 }
@@ -51,6 +50,20 @@ namespace CourseWorkHash
             value = "";
         }
 
+        public Leaf(string _value)
+        {
+            value = _value;
+            left = null;
+            right = null;
+        }
+
+        public Leaf(string _value, Leaf _left, Leaf _right)
+        {
+            value = _value;
+            left = _left;
+            right = _right;
+        }
+
         public Leaf left;
         public Leaf right;
         public string value;
@@ -58,22 +71,106 @@ namespace CourseWorkHash
 
     public class BinaryTree
     {
+        public BinaryTree()
+        {
+            root = null;
+            leafsCount = 0;
+        }
+
         public bool Add(string value)
         {
-            if (value > root.value)
+            if (!Find(value))
             {
+                Leaf newLeaf = new Leaf(value);
 
+                if (root == null)
+                {
+                    root = newLeaf;
+                }
+                else
+                {
+                    Leaf currentLeaf = root;
+                    Leaf previousLeaf;
+
+                    while (currentLeaf != null)
+                    {
+                        if (value > currentLeaf)
+                        {
+                            currentLeaf = currentLeaf.right;
+                        }
+                        else
+                        {
+                            currentLeaf = currentLeaf.left;
+                        }
+
+                        previousLeaf = currentLeaf;
+                    }
+
+                    if (value > previousLeaf)
+                    {
+                        previousLeaf.right = newLeaf;
+                    }
+                    else
+                    {
+                        previousLeaf.left = newLeaf;
+                    }
+                }
+                
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         public bool Find(string value)
         {
+            Leaf currentLeaf = root;
+
+            while (currentLeaf != null)
+            {
+                if (value == currentLeaf)
+                {
+                    return true;
+                }
+                else if (value > currentLeaf)
+                {
+                    currentLeaf = currentLeaf.right;
+                }
+                else
+                {
+                    currentLeaf = currentLeaf.left;
+                }
+            }
+
             return false;
         }
 
         public bool Delete(string value)
         {
-            return false;
+            Leaf currentLeaf = root;
+            if (Find(value))
+            {
+                while (currentLeaf != value)
+                {
+                    if (value > currentLeaf)
+                    {
+                        currentLeaf = currentLeaf.right;
+                    }
+                    else
+                    {
+                        currentLeaf = currentLeaf.left;
+                    }
+                }
+
+                currentLeaf = null;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Print()
@@ -114,7 +211,10 @@ namespace CourseWorkHash
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < size; i++)
+            {
+                elements[i] = new BinaryTree();
+            }
         }
 
         public bool Delete(string item)

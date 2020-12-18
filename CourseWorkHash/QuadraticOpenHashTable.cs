@@ -264,12 +264,11 @@ namespace CourseWorkHash
 
         public void Clear()
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(int item)
-        {
-            throw new NotImplementedException();
+            for (int i = 0; i < size; i++)
+            {
+                elements[i] = "";
+                elementsState[i] = ElementStatement.empty;
+            }
         }
 
         public string[] GetItems()
