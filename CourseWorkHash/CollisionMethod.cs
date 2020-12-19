@@ -7,7 +7,7 @@ namespace CourseWorkHash
 {
     public enum CollisionMethod
     {
-        Chains = 0,
+        Chains = 1,
         BinaryTree,
         LinearProbing,
         QuadraticProbing,

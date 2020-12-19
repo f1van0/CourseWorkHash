@@ -43,6 +43,52 @@ namespace CourseWorkHash
             }
         }
 
+        public static bool operator <(Leaf leaf, string value2)
+        {
+            int i = 0;
+            string leafValue = leaf.value;
+            int length1 = leafValue.Length;
+            int length2 = value2.Length;
+            int minLength = Math.Min(length1, length2);
+            while (leafValue[i] == value2[i] && i < minLength)
+            {
+                i++;
+            }
+
+            if (i == minLength - 1)
+            {
+                if (length1 < length2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (leafValue[i] < value2[i])
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static bool operator ==(Leaf leaf, string value2)
+        {
+            return (leaf.value == value2);
+        }
+
+        public static bool operator !=(Leaf leaf, string value2)
+        {
+            return (leaf.value != value2);
+        }
+
         public Leaf()
         {
             left = null;
@@ -90,11 +136,11 @@ namespace CourseWorkHash
                 else
                 {
                     Leaf currentLeaf = root;
-                    Leaf previousLeaf;
+                    Leaf previousLeaf = null;
 
                     while (currentLeaf != null)
                     {
-                        if (value > currentLeaf)
+                        if (currentLeaf < value)
                         {
                             currentLeaf = currentLeaf.right;
                         }
@@ -106,7 +152,7 @@ namespace CourseWorkHash
                         previousLeaf = currentLeaf;
                     }
 
-                    if (value > previousLeaf)
+                    if (previousLeaf < value)
                     {
                         previousLeaf.right = newLeaf;
                     }
@@ -130,11 +176,11 @@ namespace CourseWorkHash
 
             while (currentLeaf != null)
             {
-                if (value == currentLeaf)
+                if (currentLeaf == value)
                 {
                     return true;
                 }
-                else if (value > currentLeaf)
+                else if (currentLeaf < value)
                 {
                     currentLeaf = currentLeaf.right;
                 }
@@ -154,7 +200,7 @@ namespace CourseWorkHash
             {
                 while (currentLeaf != value)
                 {
-                    if (value > currentLeaf)
+                    if (currentLeaf < value)
                     {
                         currentLeaf = currentLeaf.right;
                     }

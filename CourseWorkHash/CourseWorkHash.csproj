@@ -48,7 +48,7 @@
     <Compile Include="ElementsStatement.cs" />
     <Compile Include="ListHashTable.cs" />
     <Compile Include="CollisionMethod.cs" />
-    <Compile Include="DeepCollisionMethod.cs" />
+    <Compile Include="HashFuncMethod.cs" />
     <Compile Include="IHashFuct.cs" />
     <Compile Include="IHashTable.cs" />
     <Compile Include="ListItem.cs" />

@@ -121,6 +121,85 @@ namespace CourseWorkHash
                 {
                     case 1:
                         {
+                            Console.WriteLine("Введите количество входных значений");
+                            int valuesCount = Convert.ToInt32(Console.ReadLine());
+                            Random random = new Random();
+                            string newValue;
+                            int length;
+
+                            for (int i = 0; i <  valuesCount; i++)
+                            {
+                                length = random.Next(1, 10);
+                                newValue = "";
+
+                                for (int j = 0; j < length; j++)
+                                {
+                                    newValue += random.Next();
+                                }
+
+                                if (hashTable.Add(newValue))
+                                {
+                                    Console.WriteLine($"Значение {newValue} было успешно добавлено в хеш-таблицу");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Значение {newValue} не удалось добавить в хеш-таблицу. Возможно такое значение уже существует или в таблице не нашлось свободной ячейки");
+                                }
+                            }
+
+                            break;
+                        }
+                    case 2:
+                        {
+                            Console.WriteLine("Введите значение");
+                            string value = Console.ReadLine();
+                            if (hashTable.Add(value))
+                            {
+                                Console.WriteLine($"Значение {value} было успешно добавлено в хеш-таблицу");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Значение {value} не удалось добавить в хеш-таблицу. Возможно такое значение уже существует или в таблице не нашлось свободной ячейки");
+                            }
+                            break;
+                        }
+                    case 3:
+                        {
+                            Console.WriteLine("Введите значение");
+                            string value = Console.ReadLine();
+                            if (hashTable.Delete(value))
+                            {
+                                Console.WriteLine($"Значение {value} было успешно удалено из хеш-таблицы");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Значение {value} не удалось удалить из хеш-таблицы");
+                            }
+                            break;
+                        }
+                    case 4:
+                        {
+                            hashTable.Clear();
+                            Console.WriteLine("Хеш-таблица была успешно очищена");
+                            break;
+                        }
+                    case 5:
+                        {
+                            hashTable.Print();
+                            break;
+                        }
+                    case 6:
+                        {
+                            Console.WriteLine("Введите значение");
+                            string value = Console.ReadLine();
+                            if (hashTable.Find(value))
+                            {
+                                Console.WriteLine($"Значение {value} было найдено");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Значение {value} не удалось найти в хеш-таблице");
+                            }
                             break;
                         }
                     default:
@@ -137,6 +216,9 @@ namespace CourseWorkHash
                 {
                     return true;
                 }
+
+                Console.WriteLine("Для продолжения работы нажмите enter");
+                Console.ReadKey();
             }
         }
 

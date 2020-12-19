@@ -7,7 +7,7 @@ namespace CourseWorkHash
 {
     public enum HashFuncMethod
     {
-        division = 0,
+        division = 1,
         multiplicative,
         midSquare
     }
