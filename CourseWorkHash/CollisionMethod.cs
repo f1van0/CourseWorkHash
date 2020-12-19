@@ -5,8 +5,10 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    public enum OpenAddressation
+    public enum CollisionMethod
     {
+        Chains = 0,
+        BinaryTree,
         LinearProbing,
         QuadraticProbing,
         DoubleHashing

@@ -182,13 +182,13 @@ namespace CourseWorkHash
         private int leafsCount;
     }
 
-    public class TreeHashTable<T> : IHashTable
+    public class TreeHashTable : IHashTable
     {
         private BinaryTree[] elements;
         private IHashFunc hashFunc;
         private int size;
 
-        TreeHashTable(int _size, IHashFunc func)
+        public TreeHashTable(int _size, IHashFunc func)
         {
             size = _size;
             elements = new BinaryTree[_size];

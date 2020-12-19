@@ -5,9 +5,10 @@ using System.Text;
 
 namespace CourseWorkHash
 {
-    public enum ChainingMethod
+    public enum HashFuncMethod
     {
-        LinkedList,
-        Tree
+        division = 0,
+        multiplicative,
+        midSquare
     }
 }
