@@ -168,39 +168,6 @@ namespace CourseWorkHash
             }
         }
 
-        /*
-        //Функция позволяет найти заданный элемент в хеш-таблице единожды
-        public int Find(string item)
-        {
-            int key = hashFunc.GetHash(item, n);
-
-            if (elements[key] == item)
-            {
-                return key;
-            }
-            else
-            {
-                int hashKey = key;
-                int i = 1;
-                key = (hashKey + i * c1 + i * i * с2) % n;
-
-                //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
-                while (key != hashKey)
-                {
-                    if (elements[key] == item)
-                    {
-                        return key;
-                    }
-
-                    i++;
-                    key = (hashKey + i * c1 + i * i * с2) % n;
-                }
-
-                return -1;
-            }
-        }
-        */
-
         //Функция позволяет найти заданный элемент в хеш-таблице единожды
         public bool Find(string item)
         {
@@ -269,18 +236,6 @@ namespace CourseWorkHash
                 elements[i] = "";
                 elementsState[i] = ElementStatement.empty;
             }
-        }
-
-        public string[] GetItems()
-        {
-            string[] items = new string[size];
-
-            for (int i = 0; i < size; i++)
-            {
-                items[i] = elements[i];
-            }
-
-            return items;
         }
 
         public bool Find(string item, out TimeSpan timeEllapsed)

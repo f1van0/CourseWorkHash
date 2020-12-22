@@ -134,7 +134,7 @@ namespace CourseWorkHash
 
                                 for (int j = 0; j < length; j++)
                                 {
-                                    newValue += random.Next();
+                                    newValue += (char)random.Next(48, 90);
                                 }
 
                                 if (hashTable.Add(newValue))
@@ -310,7 +310,8 @@ namespace CourseWorkHash
         {
             Console.Title = "Hashometer";
 
-            Menu0();
+            MainFirstModeMenu(10, (int)CollisionMethod.BinaryTree, (int)HashFuncMethod.midSquare);
+            //Menu0();
         }
     }
 }

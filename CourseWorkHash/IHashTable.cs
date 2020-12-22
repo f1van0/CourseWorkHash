@@ -12,7 +12,6 @@ namespace CourseWorkHash
         bool Find(string item);
         bool Find(string item, out TimeSpan timeEllapsed);
         void Print();
-        string[] GetItems();
         void Clear();
 
     }

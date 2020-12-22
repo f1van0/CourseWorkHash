@@ -134,8 +134,14 @@ namespace CourseWorkHash
 
         public bool Add(string item)
         {
-            int index = hashFunc.GetHash(item, size);
-            return elements[index].Add(item);
+            int hashKey = hashFunc.GetHash(item, size);
+            if (elements[hashKey] == null)
+            {
+                elements[hashKey] = new ChainElem(item);
+                return true;
+            }
+            else
+                return elements[hashKey].Add(item);
         }
 
         public void Clear()
@@ -149,21 +155,22 @@ namespace CourseWorkHash
         public bool Delete(string item)
         {
             int hashKey = hashFunc.GetHash(item, size);
-            return elements[hashKey].Delete(item);
+            if (elements[hashKey] == null)
+                return false;
+            else
+                return elements[hashKey].Delete(item);
         }
 
         public bool Find(string item)
         {
             int hashKey = hashFunc.GetHash(item, size);
-            return elements[hashKey].Find(item);
+            if (elements[hashKey] == null)
+                return false;
+            else
+                return elements[hashKey].Find(item);
         }
 
         public bool Find(string item, out TimeSpan timeEllapsed)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string[] GetItems()
         {
             throw new NotImplementedException();
         }
