@@ -71,7 +71,6 @@ namespace CourseWorkHash
                 {
                     //Происходит вставка элемента
                     elements[hashKey] = item;
-                    elementsState[hashKey] = ElementStatement.chained;
 
                     a++;
                     return true;
@@ -84,15 +83,27 @@ namespace CourseWorkHash
                     int key = (hashKey + secondHashFunc.GetHash(item, size) + shift) % size;
 
                     List<int> chainedKeys = new List<int>();
+
+                    if (elementsState[hashKey] == ElementStatement.occupied)
+                        chainedKeys.Add(hashKey);
+
                     //Пока новый ключ не совпадет с прошлым можно подбирать новый (совпадение нового ключа со старым означает то, что начинается проход "по тому же кругу" и это значит, что не нашлась ячейка для вставки нового элемента)
                     while (key != hashKey)
                     {
-                        //Если элемент нового ключа пуст
-                        if (elementsState[key] == ElementStatement.empty)
+                        //Если алгоритм попал в занятую ячейку, но не связанную с остальными, то такой ключ добавляется в список связанных
+                        if (elementsState[key] == ElementStatement.occupied)
+                        {
+                            chainedKeys.Add(key);
+                        }
+                        //Иначе если ячейка была пустой изначально либо связанной, но без значения внутри, то добавляется новый элемент в хеш-таблицу
+                        else if (elementsState[key] == ElementStatement.empty || (elementsState[key] == ElementStatement.chained && elements[key] == ""))
                         {
                             //Происходит вставка элемента
                             elements[key] = item;
-                            elementsState[key] = ElementStatement.occupied;
+
+                            if (elementsState[key] == ElementStatement.empty)
+                                elementsState[key] = ElementStatement.occupied;
+
 
                             foreach (var chainedKey in chainedKeys)
                             {
@@ -101,11 +112,6 @@ namespace CourseWorkHash
 
                             a++;
                             return true;
-                        }
-                        //Если алгоритм попал в занятую ячейку, но не связанную с остальными, то такой ключ добавляется в список связанных
-                        else if (elementsState[key] == ElementStatement.occupied)
-                        {
-                            chainedKeys.Add(key);
                         }
 
                         i++;
@@ -202,13 +208,20 @@ namespace CourseWorkHash
                 //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
                 while (key != hashKey)
                 {
-                    if (elements[key] == item)
+                    if (elementsState[key] == ElementStatement.empty)
                     {
-                        return true;
+                        return false;
                     }
+                    else
+                    {
+                        if (elements[key] == item)
+                        {
+                            return true;
+                        }
 
-                    i++;
-                    key = (hashKey + (secondHashFunc.GetHash(item, size) + shift) * i) % size;
+                        i++;
+                        key = (hashKey + (secondHashFunc.GetHash(item, size) + shift) * i) % size;
+                    }
                 }
 
                 return false;

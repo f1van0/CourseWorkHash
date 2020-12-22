@@ -179,8 +179,17 @@ namespace CourseWorkHash
                         }
                     case 4:
                         {
-                            hashTable.Clear();
-                            Console.WriteLine("Хеш-таблица была успешно очищена");
+                            Console.WriteLine("Вы точно хотите удалить все записи из хеш-таблицы? [1]: Да [2]: Нет");
+                            int choice2 = Convert.ToInt32(Console.ReadLine());
+                            if (choice2 == 1)
+                            {
+                                hashTable.Clear();
+                                Console.WriteLine("Хеш-таблица была успешно очищена");
+                            }
+                            else
+                            {
+
+                            }
                             break;
                         }
                     case 5:
@@ -310,7 +319,7 @@ namespace CourseWorkHash
         {
             Console.Title = "Hashometer";
 
-            MainFirstModeMenu(10, (int)CollisionMethod.BinaryTree, (int)HashFuncMethod.midSquare);
+            MainFirstModeMenu(3, (int)CollisionMethod.BinaryTree, (int)HashFuncMethod.division);
             //Menu0();
         }
     }

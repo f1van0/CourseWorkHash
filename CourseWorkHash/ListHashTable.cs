@@ -49,7 +49,7 @@ namespace CourseWorkHash
                 else
                 {
                     ChainElem _child = child;
-                    ChainElem _parent;
+                    ChainElem _parent = child;
 
                     while (_child != null)
                     {
@@ -57,7 +57,10 @@ namespace CourseWorkHash
                         _child = _child.child;
                     }
 
-                    _parent = new ChainElem(_value, _child);
+                    if (_parent == _child)
+                        child = new ChainElem(_value);
+                    else
+                        _parent.child = new ChainElem(_value);
                 }
 
                 return true;
@@ -103,11 +106,22 @@ namespace CourseWorkHash
                 else
                 {
                     ChainElem _child = child;
+                    ChainElem _parent = child;
                     while (_child.value != _value)
                     {
+                        _parent = _child;
                         _child = _child.child;
                     }
-                    _child = null;
+
+                    if (_parent == _child)
+                    {
+                        child = child.child;
+                    }
+                    else
+                    {
+                        ref ChainElem _refParent = ref _parent;
+                        _refParent.child = _child.child;
+                    }
                 }
 
                 return true;
@@ -179,14 +193,19 @@ namespace CourseWorkHash
         {
             for (int i = 0; i < size; i++)
             {
-                Console.Write($"{i}. {elements[i].GetValue()}");
-                ChainElem _child = elements[i].GetChild();
-                while (_child != null)
+                Console.Write($"{i}. ");
+                if (elements[i] != null)
                 {
-                    Console.Write($" -> {_child.GetValue()}");
-                }
+                    Console.Write(elements[i].GetValue());
+                    ChainElem _child = elements[i].GetChild();
+                    while (_child != null)
+                    {
+                        Console.Write($" -> {_child.GetValue()}");
+                        _child = _child.GetChild();
+                    }
 
-                Console.WriteLine();
+                    Console.WriteLine();
+                }
             }
         }
     }

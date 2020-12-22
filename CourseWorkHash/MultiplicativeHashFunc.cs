@@ -18,7 +18,8 @@ namespace CourseWorkHash
                 key += item[i];
             }
 
-            //1 = 0.1, 2 = 0.2, 10 = 0.1, 15 = 0.15...
+            //например для size = 10, получившиеся randomValue будут 1 = 0.1, 2 = 0.2, 10 = 0.1, 11 = 0.1, 12 = 0,2 ...
+            //Соответственно для size = 100, randomValue будут 1 = 0,1, 99 = 0,99 и т.д.
             float randomValue = key % size;
             while(randomValue > 0)
             {

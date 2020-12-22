@@ -279,21 +279,33 @@ namespace CourseWorkHash
 
                 if (currentLeaf.Left != null && currentLeaf.Right == null)
                 {
-                    refParentLeaf.Left = refCurrentLeaf.Left;
+                    if (currentLeaf.Value == parentLeaf.Value)
+                        root = refCurrentLeaf.Left;
+                    else
+                        refParentLeaf.Left = refCurrentLeaf.Left;
                 }
                 else if (currentLeaf.Left == null && currentLeaf.Right != null)
                 {
-                    refParentLeaf.Right = refCurrentLeaf.Right;
+                    if (currentLeaf.Value == parentLeaf.Value)
+                        root = refCurrentLeaf.Right;
+                    else
+                        refParentLeaf.Right = refCurrentLeaf.Right;
                 }
                 else if (currentLeaf.Left != null && currentLeaf.Right != null)
                 {
                     Leaf maxLeftLeaf = currentLeaf.Left;
                     Leaf parentMaxLeftLeaf = currentLeaf;
-                    while (maxLeftLeaf != null)
+                    while (true)
                     {
                         parentMaxLeftLeaf = maxLeftLeaf;
+
+                        if (maxLeftLeaf.Right == null)
+                            break;
+
                         maxLeftLeaf = maxLeftLeaf.Right;
                     }
+
+                    parentMaxLeftLeaf.Left = maxLeftLeaf.Left;
 
                     if (parentMaxLeftLeaf != currentLeaf)
                     {
@@ -301,22 +313,22 @@ namespace CourseWorkHash
                         {
                             if (parentLeaf == currentLeaf)
                             {
-                                refParentLeaf = new Leaf(parentMaxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
+                                root = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
                             }
                             else
                             {
-                                refParentLeaf.Right = new Leaf(parentMaxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
+                                refParentLeaf.Right = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
                             }
                         }
                         else
                         {
                             if (parentLeaf == currentLeaf)
                             {
-                                refParentLeaf = new Leaf(parentMaxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
+                                root = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
                             }
                             else
                             {
-                                refParentLeaf.Left = new Leaf(parentMaxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
+                                refParentLeaf.Left = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
                             }
                         }
                     }
