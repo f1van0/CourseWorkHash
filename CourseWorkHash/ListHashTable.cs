@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CourseWorkHash
@@ -135,6 +136,10 @@ namespace CourseWorkHash
 
     public class ListHashTable : IHashTable
     {
+        public string Name => $"Хеш-таблица. Способ разрешения коллизий - метод цепочек. Хеш-функция - {hashFunc.Name}.";
+
+        public string ShortName => $"Метод цепочек;{hashFunc.Name}";
+
         private ChainElem[] elements;
         private int size;
         private IHashFunc hashFunc;
@@ -184,29 +189,54 @@ namespace CourseWorkHash
                 return elements[hashKey].Find(item);
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public bool Find(string item, out TimeSpan timeEllapsed)
         {
-            throw new NotImplementedException();
+            DateTime startTime, endTime;
+            startTime = DateTime.Now;
+            int hashKey = hashFunc.GetHash(item, size);
+            if (elements[hashKey] == null)
+            {
+                timeEllapsed = TimeSpan.Zero;
+                return false;
+            }
+            else
+            {
+                bool result = elements[hashKey].Find(item);
+                endTime = DateTime.Now;
+                timeEllapsed = endTime - startTime;
+
+                return result;
+            }
         }
 
         public void Print()
         {
+            Console.WriteLine(TableToString());
+        }
+
+        //Функция позволяет преобразовать все записи хеш-таблицы в строку
+        public string TableToString()
+        {
+            string table = "";
             for (int i = 0; i < size; i++)
             {
-                Console.Write($"{i}. ");
+                table += $"{i}. ";
                 if (elements[i] != null)
                 {
-                    Console.Write(elements[i].GetValue());
+                    table += elements[i].GetValue();
                     ChainElem _child = elements[i].GetChild();
                     while (_child != null)
                     {
-                        Console.Write($" -> {_child.GetValue()}");
+                        table += $" -> {_child.GetValue()}";
                         _child = _child.GetChild();
                     }
-
-                    Console.WriteLine();
                 }
+
+                table += "\n";
             }
+
+            return table;
         }
     }
 }

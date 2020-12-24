@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -134,7 +135,10 @@ namespace CourseWorkHash
 
                                 for (int j = 0; j < length; j++)
                                 {
-                                    newValue += (char)random.Next(48, 90);
+                                    if (random.Next(0, 2) == 1)
+                                        newValue += (char)random.Next(65, 90);
+                                    else
+                                        newValue += (char)random.Next(48, 57);
                                 }
 
                                 if (hashTable.Add(newValue))
@@ -184,11 +188,7 @@ namespace CourseWorkHash
                             if (choice2 == 1)
                             {
                                 hashTable.Clear();
-                                Console.WriteLine("Хеш-таблица была успешно очищена");
-                            }
-                            else
-                            {
-
+                                Console.WriteLine("Хеш-таблица была успешно очищена.");
                             }
                             break;
                         }
@@ -199,15 +199,20 @@ namespace CourseWorkHash
                         }
                     case 6:
                         {
+                            Console.WriteLine("Показать время поиска? [1]: Да [2]: Нет");
+                            int choice2 = Convert.ToInt32(Console.ReadLine());
+
                             Console.WriteLine("Введите значение");
                             string value = Console.ReadLine();
-                            if (hashTable.Find(value))
+                            TimeSpan time;
+                            if (hashTable.Find(value, out time))
                             {
-                                Console.WriteLine($"Значение {value} было найдено");
+                                Console.Write($"Значение {value} было найдено. ");
+                                Console.WriteLine($"Время поиска составило {time.TotalMilliseconds} мс.");
                             }
                             else
                             {
-                                Console.WriteLine($"Значение {value} не удалось найти в хеш-таблице");
+                                Console.WriteLine($"Значение {value} не удалось найти в хеш-таблице.");
                             }
                             break;
                         }
@@ -266,23 +271,217 @@ namespace CourseWorkHash
            
         }
 
-        static void SecondModeMenu1(int length)
+        static void SecondModeMenu1(int size)
         {
+            IHashTable[] hashTables = new IHashTable[15];
+            int hashTableNumber = 0;
+            IHashFunc hashFunc;
+
             Console.Clear();
 
             //Пользователь, попадав во второй режим сбора данных, сначала вводит 
-            Console.WriteLine("Введите диапазон и шаг изменения количества входных значений");
-            int minLength = Convert.ToInt32(Console.ReadLine());
-            int maxLength = Convert.ToInt32(Console.ReadLine());
-            int step = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите количество входящих значений");
+            int length = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("");
-            Console.WriteLine("Введите диапазон значений");
-            int minValue = Convert.ToInt32(Console.ReadLine());
-            int maxValue = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите название файла в который будет выводится результат");
+            string fileName = Console.ReadLine();
 
-            Console.WriteLine("");
-            int choice = Convert.ToInt32(Console.ReadLine());
+            //Массив сгенерированныых значений
+            string[] values = new string[length];
+
+            Random random = new Random();
+            int randomLength;
+
+            for (int t = 0; t < length; t++)
+            {
+                randomLength = random.Next(1, 10);
+                for (int k = 0; k < randomLength; k++)
+                {
+                    if (random.Next(0, 2) == 1)
+                        values[t] += (char)random.Next(65, 90);
+                    else
+                        values[t] += (char)random.Next(48, 57);
+                }
+            }
+            //Производится перебор всех методов хеширования и разрещения коллизий, создаются хеш-таблицы с соответствующими методами
+            for (int i = 1; i <= 5; i++)
+            {
+                for (int j = 1; j <= 3; j++)
+                {
+                    switch (j)
+                    {
+                        case (int)HashFuncMethod.division:
+                            {
+                                hashFunc = new DivisionHashFunc();
+                                break;
+                            }
+                        case (int)HashFuncMethod.multiplicative:
+                            {
+                                hashFunc = new MultiplicativeHashFunc();
+                                break;
+                            }
+                        default:
+                            {
+                                hashFunc = new MidSquareHashFunc();
+                                break;
+                            }
+                    }
+
+                    switch (i)
+                    {
+                        case (int)CollisionMethod.Chains:
+                            {
+                                hashTables[hashTableNumber] = new ListHashTable(size, hashFunc);
+                                break;
+                            }
+                        case (int)CollisionMethod.BinaryTree:
+                            {
+                                hashTables[hashTableNumber] = new TreeHashTable(size, hashFunc);
+                                break;
+                            }
+                        case (int)CollisionMethod.LinearProbing:
+                            {
+                                hashTables[hashTableNumber] = new LinearOpenHashTable(size, hashFunc);
+                                break;
+                            }
+                        case (int)CollisionMethod.QuadraticProbing:
+                            {
+                                hashTables[hashTableNumber] = new QuadraticOpenHashTable(size, hashFunc);
+                                break;
+                            }
+                        default:
+                            {
+                                if (j == 1)
+                                {
+                                    hashTables[hashTableNumber] = new DoubleOpenHashTable(size, hashFunc, new MultiplicativeHashFunc(), random.Next(0, size));
+                                }
+                                else if (j == 2)
+                                {
+                                    hashTables[hashTableNumber] = new DoubleOpenHashTable(size, hashFunc, new MidSquareHashFunc(), random.Next(0, size));
+                                }
+                                else
+                                {
+                                    hashTables[hashTableNumber] = new DoubleOpenHashTable(size, hashFunc, new DivisionHashFunc(), random.Next(0, size));
+                                }
+
+                                break;
+                            }
+                    }
+
+                    if (!(i >= 5 && Math.Abs(i - j) % 3 == 2) && hashTableNumber < 15)
+                    {
+                        Console.WriteLine("-----------------------------------------------------------------------------");
+                        Console.WriteLine($"Начало работы с хеш-таблицей - \"{hashTables[hashTableNumber].Name}\"");
+
+                        int failedAddCount = 0;
+                    
+                        for (int io = 0; io < length; io++)
+                        {
+                            if (!hashTables[hashTableNumber].Add(values[io]))
+                            {
+                                failedAddCount++;
+                            }
+                        }
+
+                        if (failedAddCount != 0)
+                        {
+                            Console.WriteLine($"Не удалось записать в таблицу {failedAddCount} значений");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Все значения были успешно добавлены в таблицу");
+                        }
+                        hashTableNumber++;
+                    }
+                }
+            }
+
+            int findCount = 100;
+            if (size < 100)
+            {
+                findCount = size;
+            }
+
+            bool notFound;
+            int randomIndex = 0;
+            TimeSpan tempTime;
+            float[] maxTimeArray = new float[15];
+            float[] avgTimeArray = new float[15];
+
+            for (int k = 0; k < findCount; k++)
+            {
+                while (true)
+                {
+                    notFound = false;
+                    randomIndex = random.Next(0, length);
+                    for (int i = 0; i < 15; i++)
+                    {
+                        if (!hashTables[i].Find(values[randomIndex]))
+                        {
+                            notFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!notFound)
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < 15; i++)
+                {
+                    hashTables[i].Find(values[randomIndex], out tempTime);
+                    avgTimeArray[i] += tempTime.Ticks / (float)size;
+                    if (tempTime.Ticks > maxTimeArray[i])
+                    {
+                        maxTimeArray[i] = tempTime.Ticks;
+                    }
+                }
+            }
+
+            //Нахождение элемента, который есть во всех полученных хеш-таблицах
+            //while (true)
+            //{
+            //    notFound = false;
+
+            //    randomIndex = random.Next(0, length);
+            //    for (int i = 0; i < 21; i++)
+            //    {
+            //        if (!hashTables[i].Find(values[randomIndex]))
+            //        {
+            //            notFound = true;
+            //            break;
+            //        }
+            //    }
+
+            //    if (!notFound)
+            //    {
+            //        break;
+            //    }
+            //}
+
+            Console.WriteLine($"Поиск общего элемента со значением - {values[randomIndex]}");
+
+            using (StreamWriter writer = new StreamWriter(fileName + ".csv", false, Encoding.UTF8))
+            {
+                TimeSpan time;
+                for (int i = 0; i < 15; i++)
+                {
+                    //hashTables[i].Find(values[randomIndex], out time);
+                    Console.WriteLine($"\n В хеш-таблице {hashTables[i].Name} \n оиск составил {avgTimeArray[i]} такт");
+                    Console.WriteLine($"{hashTables[i].Name}\nВремя поиска: {maxTimeArray[i]} такт.");
+                    //writer.WriteLine("=======================================================================");
+                    writer.WriteLine($"{hashTables[i].ShortName};{avgTimeArray[i]};");
+                
+                    //writer.WriteLine($"Время поиска составило {time.TotalMilliseconds} мс.\n");
+                }
+            }
+            Console.WriteLine("\n\n");
+            Console.WriteLine("Для продолжения работы нажмите enter");
+            Console.ReadKey();
+
+            Menu0();
         }
 
         static void Menu0()
@@ -319,8 +518,8 @@ namespace CourseWorkHash
         {
             Console.Title = "Hashometer";
 
-            MainFirstModeMenu(3, (int)CollisionMethod.BinaryTree, (int)HashFuncMethod.division);
-            //Menu0();
+            //MainFirstModeMenu(2, (int)CollisionMethod.BinaryTree, (int)HashFuncMethod.division);
+            Menu0();
         }
     }
 }

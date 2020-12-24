@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CourseWorkHash
 {
     public class QuadraticOpenHashTable : IHashTable
     {
+        public string Name => $"Квадратичные пробы. Хеш-функция - {hashFunc.Name}.";
+
+        public string ShortName => $"Квадратичные пробы;{hashFunc.Name}";
+
         private string[] elements;
         private IHashFunc hashFunc;
         private ElementStatement[] elementsState;
@@ -46,7 +51,7 @@ namespace CourseWorkHash
         public bool Add(string item)
         {
             //Если элемента не найден, то работа по добавлению нового элемента продолжается
-            if (!Find(item))
+            if (!Find(item) && a != size)
             {
                 int hashKey = hashFunc.GetHash(item, size);
 
@@ -55,6 +60,7 @@ namespace CourseWorkHash
                 {
                     //Происходит вставка элемента
                     elements[hashKey] = item;
+                    elementsState[hashKey] = ElementStatement.occupied;
 
                     a++;
                     return true;
@@ -212,13 +218,27 @@ namespace CourseWorkHash
             }
         }
 
-        //Фцнкция позволяет вывести все ячейки и их содержимое на экран
+        //Функция позволяет вывести все ячейки и их содержимое на экран
         public void Print()
         {
+            Console.WriteLine(TableToString());
+        }
+
+        //Функция позволяет преобразовать все записи хеш-таблицы в строку
+        public string TableToString()
+        {
+            string table = "";
             for (int i = 0; i < size; i++)
             {
-                Console.WriteLine($"{i}. {elements[i]}");
+                table += $"{i}.";
+
+                if (elements[i] != null)
+                    table += $" {elements[i]} ";
+
+                table += "\n";
             }
+
+            return table;
         }
 
         //Функция позволяет считать из файла значения, которые добавятся в хеш-таблицу
@@ -251,9 +271,49 @@ namespace CourseWorkHash
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public bool Find(string item, out TimeSpan timeEllapsed)
         {
-            throw new NotImplementedException();
+            DateTime startTime, endTime;
+            startTime = DateTime.Now;
+            int key = hashFunc.GetHash(item, size);
+            if (elements[key] == item)
+            {
+                endTime = DateTime.Now;
+                timeEllapsed = endTime - startTime;
+                return true;
+            }
+            else
+            {
+                int hashKey = key;
+                int i = 1;
+                key = (hashKey + i * c1 + i * i * с2) % size;
+
+                //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
+                while (key != hashKey)
+                {
+                    if (elementsState[key] == ElementStatement.empty)
+                    {
+                        timeEllapsed = TimeSpan.Zero;
+                        return false;
+                    }
+                    else
+                    {
+                        if (elements[key] == item)
+                        {
+                            endTime = DateTime.Now;
+                            timeEllapsed = endTime - startTime;
+                            return true;
+                        }
+
+                        i++;
+                        key = (hashKey + i * c1 + i * i * с2) % size;
+                    }
+                }
+
+                timeEllapsed = TimeSpan.Zero;
+                return false;
+            }
         }
     }
 }

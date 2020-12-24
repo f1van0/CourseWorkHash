@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CourseWorkHash
@@ -156,20 +157,30 @@ namespace CourseWorkHash
             }
         }
 
-        public void Print(int _shift)
+        public string LeafToString(int _shift)
         {
+            string leaf = "";
+
             if (right != null)
             {
-                right.Print(_shift + val.Length + 4);
+                leaf += right.LeafToString(_shift + val.Length + 4);
             }
 
             string strShift = new string(' ', _shift);
-            Console.WriteLine($"{strShift}- {val} -|");
+            leaf += $"{strShift}- {val}";
+            if (left != null || right != null)
+            {
+                leaf += " -|";
+            }
+
+            leaf += "\n";
 
             if (left != null)
             {
-                left.Print(_shift + val.Length + 4);
+                leaf += left.LeafToString(_shift + val.Length + 4);
             }
+
+            return leaf;
         }
 
         private Leaf left { get; set; }
@@ -193,42 +204,35 @@ namespace CourseWorkHash
 
         public bool Add(string value)
         {
-            if (!Find(value))
+            Leaf newLeaf = new Leaf(value);
+
+            Leaf currentLeaf = root;
+            Leaf previousLeaf = null;
+
+            while (currentLeaf != null)
             {
-                Leaf newLeaf = new Leaf(value);
+                previousLeaf = currentLeaf;
 
-                Leaf currentLeaf = root;
-                Leaf previousLeaf = null;
-
-                while (currentLeaf != null)
+                if (currentLeaf < value)
                 {
-                    previousLeaf = currentLeaf;
-
-                    if (currentLeaf < value)
-                    {
-                        currentLeaf = currentLeaf.Right;
-                    }
-                    else
-                    {
-                        currentLeaf = currentLeaf.Left;
-                    }
-                }
-
-                if (previousLeaf < value)
-                {
-                    previousLeaf.Right = newLeaf;
+                    currentLeaf = currentLeaf.Right;
                 }
                 else
                 {
-                    previousLeaf.Left = newLeaf;
+                    currentLeaf = currentLeaf.Left;
                 }
+            }
 
-                return true;
+            if (previousLeaf < value)
+            {
+                previousLeaf.Right = newLeaf;
             }
             else
             {
-                return false;
+                previousLeaf.Left = newLeaf;
             }
+
+            return true;
         }
 
         public bool Find(string value)
@@ -256,118 +260,114 @@ namespace CourseWorkHash
 
         public bool Delete(string value)
         {
-            Leaf currentLeaf = root;
-            Leaf parentLeaf = root;
-            if (Find(value))
+            Leaf deletedLeaf = root;
+            Leaf parentDeletedLeaf = root;
+            while (deletedLeaf.Value != value)
             {
-                while (currentLeaf.Value != value)
-                {
-                    parentLeaf = currentLeaf;
+                parentDeletedLeaf = deletedLeaf;
 
-                    if (currentLeaf < value)
-                    {
-                        currentLeaf = currentLeaf.Right;
-                    }
-                    else
-                    {
-                        currentLeaf = currentLeaf.Left;
-                    }
+                if (deletedLeaf < value)
+                {
+                    deletedLeaf = deletedLeaf.Right;
+                }
+                else
+                {
+                    deletedLeaf = deletedLeaf.Left;
+                }
+            }
+
+            ref Leaf refParentDeletedLeaf = ref parentDeletedLeaf;
+            ref Leaf refDeletedLeaf = ref deletedLeaf;
+
+            if (deletedLeaf.Left != null && deletedLeaf.Right == null)
+            {
+                if (deletedLeaf.Value == parentDeletedLeaf.Value)
+                    root = refDeletedLeaf.Left;
+                else
+                    refParentDeletedLeaf.Left = refDeletedLeaf.Left;
+            }
+            else if (deletedLeaf.Left == null && deletedLeaf.Right != null)
+            {
+                if (deletedLeaf.Value == parentDeletedLeaf.Value)
+                    root = refDeletedLeaf.Right;
+                else
+                    refParentDeletedLeaf.Right = refDeletedLeaf.Right;
+            }
+            else if (deletedLeaf.Left != null && deletedLeaf.Right != null)
+            {
+                Leaf maxLeftLeaf = deletedLeaf.Left;
+                Leaf parentMaxLeftLeaf = deletedLeaf;
+                while (true)
+                {
+                    parentMaxLeftLeaf = maxLeftLeaf;
+
+                    if (maxLeftLeaf.Right == null)
+                        break;
+
+                    maxLeftLeaf = maxLeftLeaf.Right;
                 }
 
-                ref Leaf refParentLeaf = ref parentLeaf;
-                ref Leaf refCurrentLeaf = ref currentLeaf;
+                parentMaxLeftLeaf.Left = maxLeftLeaf.Left;
 
-                if (currentLeaf.Left != null && currentLeaf.Right == null)
+                if (parentMaxLeftLeaf != deletedLeaf)
                 {
-                    if (currentLeaf.Value == parentLeaf.Value)
-                        root = refCurrentLeaf.Left;
-                    else
-                        refParentLeaf.Left = refCurrentLeaf.Left;
-                }
-                else if (currentLeaf.Left == null && currentLeaf.Right != null)
-                {
-                    if (currentLeaf.Value == parentLeaf.Value)
-                        root = refCurrentLeaf.Right;
-                    else
-                        refParentLeaf.Right = refCurrentLeaf.Right;
-                }
-                else if (currentLeaf.Left != null && currentLeaf.Right != null)
-                {
-                    Leaf maxLeftLeaf = currentLeaf.Left;
-                    Leaf parentMaxLeftLeaf = currentLeaf;
-                    while (true)
+                    if (parentDeletedLeaf < deletedLeaf.Value)
                     {
-                        parentMaxLeftLeaf = maxLeftLeaf;
-
-                        if (maxLeftLeaf.Right == null)
-                            break;
-
-                        maxLeftLeaf = maxLeftLeaf.Right;
-                    }
-
-                    parentMaxLeftLeaf.Left = maxLeftLeaf.Left;
-
-                    if (parentMaxLeftLeaf != currentLeaf)
-                    {
-                        if (parentLeaf < currentLeaf.Value)
+                        if (parentDeletedLeaf == deletedLeaf)
                         {
-                            if (parentLeaf == currentLeaf)
-                            {
-                                root = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
-                            }
-                            else
-                            {
-                                refParentLeaf.Right = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
-                            }
+                            root = new Leaf(maxLeftLeaf.Value, deletedLeaf.Left, deletedLeaf.Right);
                         }
                         else
                         {
-                            if (parentLeaf == currentLeaf)
-                            {
-                                root = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
-                            }
-                            else
-                            {
-                                refParentLeaf.Left = new Leaf(maxLeftLeaf.Value, currentLeaf.Left, currentLeaf.Right);
-                            }
+                            refParentDeletedLeaf.Right = new Leaf(maxLeftLeaf.Value, deletedLeaf.Left, deletedLeaf.Right);
                         }
                     }
                     else
                     {
-                        if (parentLeaf < currentLeaf.Value)
+                        if (parentDeletedLeaf == deletedLeaf)
                         {
-                            refParentLeaf.Right = new Leaf(parentMaxLeftLeaf.Value, null, currentLeaf.Right);
+                            root = new Leaf(maxLeftLeaf.Value, deletedLeaf.Left, deletedLeaf.Right);
                         }
                         else
                         {
-                            refParentLeaf.Left = new Leaf(parentMaxLeftLeaf.Value, null, currentLeaf.Right);
+                            refParentDeletedLeaf.Left = new Leaf(maxLeftLeaf.Value, deletedLeaf.Left, deletedLeaf.Right);
                         }
                     }
                 }
                 else
                 {
-                    if (parentLeaf < currentLeaf.Value)
-                    {
-                        refParentLeaf.Right = null;
-                    }
-                    else
-                    {
-                        refParentLeaf.Left = null;
-                    }
+
                 }
-                
-                return true;
             }
             else
             {
-                return false;
+                if (parentDeletedLeaf.Value == deletedLeaf.Value)
+                {
+                    root = null;
+                }
+                else
+                {
+                    if (parentDeletedLeaf < deletedLeaf.Value)
+                        refParentDeletedLeaf.Right = null;
+                    else
+                        refParentDeletedLeaf.Left = null;
+                }
             }
+
+            return true;
         }
 
-        public void Print()
+        public string LeafToString()
         {
+            string leaf = "";
             int shift = 0;
-            root.Print(shift);
+            leaf += root.LeafToString(0);
+            return leaf;
+        }
+
+        public Leaf GetRoot()
+        {
+            return root;
         }
 
         private Leaf root;
@@ -376,6 +376,10 @@ namespace CourseWorkHash
 
     public class TreeHashTable : IHashTable
     {
+        public string Name => $"Бинарные деревья. Хеш-функция - {hashFunc.Name}.";
+
+        public string ShortName => $"Бинарные деревья;{hashFunc.Name}";
+
         private BinaryTree[] elements;
         private IHashFunc hashFunc;
         private int size;
@@ -418,11 +422,22 @@ namespace CourseWorkHash
 
         public bool Delete(string item)
         {
-            int hashKey = hashFunc.GetHash(item, size);
-            if (elements[hashKey] == null)
-                return false;
+            if (Find(item))
+            {
+                int hashKey = hashFunc.GetHash(item, size);
+                bool result = elements[hashKey].Delete(item);
+
+                if (elements[hashKey].GetRoot() == null)
+                {
+                    elements[hashKey] = null;
+                }
+
+                return result;
+            }
             else
-                return elements[hashKey].Delete(item);
+            {
+                return false;
+            }
         }
 
         public bool Find(string item)
@@ -434,22 +449,47 @@ namespace CourseWorkHash
                 return elements[hashKey].Find(item);
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public bool Find(string item, out TimeSpan timeEllapsed)
         {
-            throw new NotImplementedException();
+            DateTime startTime, endTime;
+            startTime = DateTime.Now;
+            int hashKey = hashFunc.GetHash(item, size);
+            if (elements[hashKey] == null)
+            {
+                timeEllapsed = TimeSpan.Zero;
+                return false;
+            }
+            else
+            {
+                bool result = elements[hashKey].Find(item);
+                endTime = DateTime.Now;
+                timeEllapsed = endTime - startTime;
+                return result;
+            }
         }
 
         public void Print()
         {
+            Console.WriteLine(TableToString());
+        }
+
+        //Функция позволяет преобразовать все записи хеш-таблицы в строку
+        public string TableToString()
+        {
+            string table = "";
+
             for (int i = 0; i < size; i++)
             {
-                Console.WriteLine($"{i}.");
+                table += $"{i}.\n";
                 if (elements[i] != null)
                 {
-                    elements[i].Print();
+                    table += elements[i].LeafToString();
                 }
-                Console.WriteLine();
+                table += "\n";
             }
+
+            return table;
         }
     }
 }

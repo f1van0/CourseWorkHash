@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CourseWorkHash
 {
     public class DoubleOpenHashTable : IHashTable
     {
+        public string Name => $"Двойное хеширование. Первая хеш-функция - {hashFunc.Name}. Вторая хеш-функция - {secondHashFunc.Name}. Коэфициент отклонения у второй хеш-функции - {shift}";
+
+        public string ShortName => $"Двойное хеширование;{hashFunc.Name}+{secondHashFunc.Name}={shift}";
+
         private string[] elements;
         private IHashFunc hashFunc;
         private IHashFunc secondHashFunc;
@@ -53,7 +58,7 @@ namespace CourseWorkHash
         public bool Add(string item)
         {
             //Если элемента не найден, то работа по добавлению нового элемента продолжается
-            if (!Find(item))
+            if (!Find(item) && a != size)
             {
                 int hashKey = hashFunc.GetHash(item, size);
 
@@ -205,7 +210,7 @@ namespace CourseWorkHash
                 int i = 1;
                 key = (hashKey + secondHashFunc.GetHash(item, size) + shift) % size;
 
-                //Идет обход хеш-таблицы квадратичными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
+                //Идет обход хеш-таблицы двойным хешированием, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
                 while (key != hashKey)
                 {
                     if (elementsState[key] == ElementStatement.empty)
@@ -216,6 +221,7 @@ namespace CourseWorkHash
                     {
                         if (elements[key] == item)
                         {
+
                             return true;
                         }
 
@@ -228,18 +234,73 @@ namespace CourseWorkHash
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         public bool Find(string item, out TimeSpan timeEllapsed)
         {
-            throw new NotImplementedException();
+            DateTime startTime, endTime;
+            startTime = DateTime.Now;
+            int key = hashFunc.GetHash(item, size);
+
+            if (elements[key] == item)
+            {
+                endTime = DateTime.Now;
+                timeEllapsed = endTime - startTime;
+                return true;
+            }
+            else
+            {
+                int hashKey = key;
+                int i = 1;
+                key = (hashKey + secondHashFunc.GetHash(item, size) + shift) % size;
+
+                //Идет обход хеш-таблицы двойным хешированием, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
+                while (key != hashKey)
+                {
+                    if (elementsState[key] == ElementStatement.empty)
+                    {
+                        timeEllapsed = TimeSpan.Zero;
+                        return false;
+                    }
+                    else
+                    {
+                        if (elements[key] == item)
+                        {
+                            endTime = DateTime.Now;
+                            timeEllapsed = endTime - startTime;
+                            return true;
+                        }
+
+                        i++;
+                        key = (hashKey + (secondHashFunc.GetHash(item, size) + shift) * i) % size;
+                    }
+                }
+
+                timeEllapsed = TimeSpan.Zero;
+                return false;
+            }
         }
 
-        //Фцнкция позволяет вывести все ячейки и их содержимое на экран
+        //Функция позволяет вывести все ячейки и их содержимое на экран
         public void Print()
         {
+            Console.WriteLine(TableToString());
+        }
+
+        //Функция позволяет преобразовать все записи хеш-таблицы в строку
+        public string TableToString()
+        {
+            string table = "";
             for (int i = 0; i < size; i++)
             {
-                Console.WriteLine($"{i}. {elements[i]}");
+                table += $"{i}.";
+
+                if (elements[i] != null)
+                    table += $" {elements[i]} ";
+
+                table += "\n";
             }
+
+            return table;
         }
     }
 }

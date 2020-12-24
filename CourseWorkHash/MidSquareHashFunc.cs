@@ -7,7 +7,7 @@ namespace CourseWorkHash
 {
     public class MidSquareHashFunc : IHashFunc
     {
-        public string Name => "Метод серидины квадрата";
+        public string Name => "Метод середины квадрата";
 
         public int GetHash(string item, int size)
         {
