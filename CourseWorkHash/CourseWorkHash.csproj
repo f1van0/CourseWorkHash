@@ -51,7 +51,6 @@
     <Compile Include="HashFuncMethod.cs" />
     <Compile Include="IHashFuct.cs" />
     <Compile Include="IHashTable.cs" />
-    <Compile Include="ListItem.cs" />
     <Compile Include="MidSquareHashFunc.cs" />
     <Compile Include="MultiplicativeHashFunc.cs" />
     <Compile Include="LinearOpenHashTable.cs" />

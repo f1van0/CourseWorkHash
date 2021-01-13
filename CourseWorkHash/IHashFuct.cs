@@ -5,9 +5,12 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    //Интерфейс хеш-функции
     public interface IHashFunc
     {
+        //Название хеш-функции
         string Name { get; }
-        int GetHash(string item, int size);
+        //Функция позволяет преобразовать входное значение item в хеш-ключ
+        long GetHash(string item, int size);
     }
 }

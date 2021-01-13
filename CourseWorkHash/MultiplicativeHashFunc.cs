@@ -5,14 +5,16 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    //Класс хеш-функции мультипликативным методом
     public class MultiplicativeHashFunc : IHashFunc
     {
         public string Name => "Мультипликативный метод";
 
-        public int GetHash(string item, int size)
+        public long GetHash(string item, int size)
         {
-            float key = 0;
+            double key = 0;
 
+            //символы item суммируются в ключ key
             for (int i = 0; i < item.Length; i++)
             {
                 key += item[i];
@@ -20,16 +22,18 @@ namespace CourseWorkHash
 
             //например для size = 10, получившиеся randomValue будут 1 = 0.1, 2 = 0.2, 10 = 0.1, 11 = 0.1, 12 = 0,2 ...
             //Соответственно для size = 100, randomValue будут 1 = 0,1, 99 = 0,99 и т.д.
-            float randomValue = key % size;
-            while(randomValue > 0)
+            double randomValue = key % size;
+            while(randomValue >= 1)
             {
                 randomValue /= 10;
             }
 
             key = key * randomValue;
-            key = key - (int)(key);
+            //Из полученного значения берется дробная часть
+            key = key - (long)(key);
 
-            return (int)key * size;
+            //Прозведение key (<1) на количество ячеек даст значение в диапазоне от 0 до size
+            return (long)(key * size);
         }
     }
 }

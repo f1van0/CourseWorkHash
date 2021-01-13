@@ -6,6 +6,7 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    //Класс реализует хеш-таблицу, разрешающую коллизии линейными пробами
     public class LinearOpenHashTable : IHashTable
     {
         public string Name => $"Линейные пробы. Хеш-функция - {hashFunc.Name}.";
@@ -18,7 +19,7 @@ namespace CourseWorkHash
         //число элементов в таблице
         int size;
         //Заполненность таблицы
-        int a;
+        int fullness;
 
         int c = 1;
 
@@ -29,7 +30,7 @@ namespace CourseWorkHash
             hashFunc = new MidSquareHashFunc();
 
             size = 0;
-            a = 0;
+            fullness = 0;
         }
 
         public LinearOpenHashTable(int _n, IHashFunc func)
@@ -38,16 +39,16 @@ namespace CourseWorkHash
             elementsState = new ElementStatement[_n];
             hashFunc = func;
             size = _n;
-            a = 0;
+            fullness = 0;
         }
 
         //Функция позволяет добавить новый элемент в хеш-таблицу
         public bool Add(string item)
         {
-            //Если элемента не найден, то работа по добавлению нового элемента продолжается
-            if (!Find(item) && a != size)
+            //Если таблица не заполнена и элемента не найден, то работа по добавлению нового элемента продолжается
+            if (fullness != size && !Find(item))
             {
-                int hashKey = hashFunc.GetHash(item, size);
+                long hashKey = hashFunc.GetHash(item, size);
 
                 //Если ячейка пуста
                 if (elementsState[hashKey] == ElementStatement.empty)
@@ -56,7 +57,7 @@ namespace CourseWorkHash
                     elements[hashKey] = item;
                     elementsState[hashKey] = ElementStatement.occupied;
 
-                    a++;
+                    fullness++;
                     return true;
                 }
                 else if (elementsState[hashKey] == ElementStatement.chained && elements[hashKey] == "")
@@ -64,16 +65,16 @@ namespace CourseWorkHash
                     //Происходит вставка элемента
                     elements[hashKey] = item;
 
-                    a++;
+                    fullness++;
                     return true;
                 }
                 //Разрешение коллизии
                 else
                 {
                     int i = 1;
-                    int key = (hashKey + i * c) % size;
+                    long key = (hashKey + i * c) % size;
 
-                    List<int> chainedKeys = new List<int>();
+                    List<long> chainedKeys = new List<long>();
 
                     if (elementsState[hashKey] == ElementStatement.occupied)
                         chainedKeys.Add(hashKey);
@@ -101,7 +102,7 @@ namespace CourseWorkHash
                                 elementsState[chainedKey] = ElementStatement.chained;
                             }
 
-                            a++;
+                            fullness++;
                             return true;
                         }
 
@@ -121,7 +122,7 @@ namespace CourseWorkHash
         //Функция позволяет удалить заданный элемент из хеш-таблицы
         public bool Delete(string item)
         {
-            int key = hashFunc.GetHash(item, size);
+            long key = hashFunc.GetHash(item, size);
 
             if (elements[key] == item)
             {
@@ -135,12 +136,12 @@ namespace CourseWorkHash
                     elementsState[key] = ElementStatement.empty;
                 }
 
-                a--;
+                fullness--;
                 return true;
             }
             else
             {
-                int hashKey = key;
+                long hashKey = key;
                 int i = 1;
                 key = (hashKey + i * c) % size;
 
@@ -160,7 +161,7 @@ namespace CourseWorkHash
                             elementsState[key] = ElementStatement.empty;
                         }
 
-                        a--;
+                        fullness--;
                         return true;
                     }
 
@@ -175,7 +176,7 @@ namespace CourseWorkHash
         //Функция позволяет найти заданный элемент в хеш-таблице единожды
         public bool Find(string item)
         {
-            int key = hashFunc.GetHash(item, size);
+            long key = hashFunc.GetHash(item, size);
 
             if (elements[key] == item)
             {
@@ -183,7 +184,7 @@ namespace CourseWorkHash
             }
             else
             {
-                int hashKey = key;
+                long hashKey = key;
                 int i = 1;
                 key = (hashKey + i * c) % size;
 
@@ -240,32 +241,39 @@ namespace CourseWorkHash
                 elements[i] = "";
                 elementsState[i] = ElementStatement.empty;
             }
+
+            fullness = 0;
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        public bool Find(string item, out TimeSpan timeEllapsed)
+        public bool Find(string item, out TimeSpan timeEllapsed, out int iter)
         {
             DateTime startTime, endTime;
             startTime = DateTime.Now;
-            int key = hashFunc.GetHash(item, size);
+            long key = hashFunc.GetHash(item, size);
 
             if (elements[key] == item)
             {
+                iter = 1;
                 endTime = DateTime.Now;
                 timeEllapsed = endTime - startTime;
                 return true;
             }
             else
             {
-                int hashKey = key;
+                iter = 1;
+                long hashKey = key;
                 int i = 1;
-                key = (hashKey + i) % size;
+                key = (hashKey + i * c) % size;
 
                 //Идет обход хеш-таблицы линейными пробами, если key повторится (т.е. совпадет с invalidKey), значит элемента с таким значением в хеш0-таблице не существует
                 while (key != hashKey)
                 {
+                    iter++;
+
                     if (elementsState[key] == ElementStatement.empty)
                     {
+                        iter = -1;
                         timeEllapsed = TimeSpan.Zero;
                         return false;
                     }
@@ -279,10 +287,11 @@ namespace CourseWorkHash
                         }
 
                         i++;
-                        key = (hashKey + i) % size;
+                        key = key = (hashKey + i * c) % size;
                     }
                 }
 
+                iter = -1;
                 timeEllapsed = TimeSpan.Zero;
                 return false;
             }

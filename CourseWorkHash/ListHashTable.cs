@@ -95,6 +95,33 @@ namespace CourseWorkHash
             }
         }
 
+        public bool Find(string _value, out int iter)
+        {
+            if (value == _value)
+            {
+                iter = 1;
+                return true;
+            }
+            else
+            {
+                iter = 1;
+                ChainElem _child = child;
+                while (_child != null)
+                {
+                    iter++;
+                    if (_child.value == _value)
+                    {
+                        return true;
+                    }
+
+                    _child = _child.child;
+                }
+
+                iter = -1;
+                return false;
+            }
+        }
+
         public bool Delete(string _value)
         {
             if (Find(_value))
@@ -134,9 +161,10 @@ namespace CourseWorkHash
         }
     }
 
+    //Класс реализует хеш-таблицу, разрешающую коллизии методом цепочек
     public class ListHashTable : IHashTable
     {
-        public string Name => $"Хеш-таблица. Способ разрешения коллизий - метод цепочек. Хеш-функция - {hashFunc.Name}.";
+        public string Name => $"Метод цепочек. Хеш-функция - {hashFunc.Name}.";
 
         public string ShortName => $"Метод цепочек;{hashFunc.Name}";
 
@@ -151,9 +179,10 @@ namespace CourseWorkHash
             hashFunc = func;
         }
 
+        //Функция позволяет добавить значение в хеш-таблицу
         public bool Add(string item)
         {
-            int hashKey = hashFunc.GetHash(item, size);
+            long hashKey = hashFunc.GetHash(item, size);
             if (elements[hashKey] == null)
             {
                 elements[hashKey] = new ChainElem(item);
@@ -163,6 +192,7 @@ namespace CourseWorkHash
                 return elements[hashKey].Add(item);
         }
 
+        //Функция позволяет очистить хеш-таблицу от значений
         public void Clear()
         {
             for (int i = 0; i < size; i++)
@@ -171,45 +201,52 @@ namespace CourseWorkHash
             }
         }
 
+        //Функция позволяет удалить значение из хеш-таблицы
         public bool Delete(string item)
         {
-            int hashKey = hashFunc.GetHash(item, size);
+            long hashKey = hashFunc.GetHash(item, size);
             if (elements[hashKey] == null)
                 return false;
             else
                 return elements[hashKey].Delete(item);
         }
 
+        //Функция позволяет найти значение в хеш-таблице
         public bool Find(string item)
         {
-            int hashKey = hashFunc.GetHash(item, size);
+            long hashKey = hashFunc.GetHash(item, size);
             if (elements[hashKey] == null)
+            {
                 return false;
+            }
             else
                 return elements[hashKey].Find(item);
         }
 
+        //Функция позволяет найти значение в хеш-таблице и вычислить длительность поиска и количество итераций
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        public bool Find(string item, out TimeSpan timeEllapsed)
+        public bool Find(string item, out TimeSpan timeEllapsed, out int iter)
         {
             DateTime startTime, endTime;
             startTime = DateTime.Now;
-            int hashKey = hashFunc.GetHash(item, size);
+            
+            long hashKey = hashFunc.GetHash(item, size);
             if (elements[hashKey] == null)
             {
                 timeEllapsed = TimeSpan.Zero;
+                iter = -1;
                 return false;
             }
             else
             {
-                bool result = elements[hashKey].Find(item);
+                bool result = elements[hashKey].Find(item, out iter);
                 endTime = DateTime.Now;
                 timeEllapsed = endTime - startTime;
-
                 return result;
             }
         }
 
+        //Функция позволяет вывести элементы хеш-таблицы на экран
         public void Print()
         {
             Console.WriteLine(TableToString());

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    //Перечисление методов хеширования
     public enum HashFuncMethod
     {
         division = 1,

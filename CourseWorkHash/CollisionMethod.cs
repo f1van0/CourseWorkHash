@@ -5,6 +5,7 @@ using System.Text;
 
 namespace CourseWorkHash
 {
+    //Перечисление методов разрешения коллизий
     public enum CollisionMethod
     {
         Chains = 1,

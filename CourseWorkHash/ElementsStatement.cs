@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseWorkHash
 {
+    //Перечисления возможных состояний элементов массива в хеш-таблицах с открытой адрессацией
     public enum ElementStatement
     {
         empty = 0,
