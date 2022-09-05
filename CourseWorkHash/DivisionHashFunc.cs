@@ -10,18 +10,18 @@ namespace CourseWorkHash
     {
         public string Name => "Метод деления";
 
-        public long GetHash(string item, int size)
-        {
-            long value = 0;
+public long GetHash(string item, int size)
+{
+    long value = 0;
 
-            //Полученная строка преобразуется в value сложением её символов
-            for (int i = 0; i < item.Length; i++)
-            {
-                value += item[i];
-            }
+    //Полученная строка преобразуется в value сложением её символов
+    for (int i = 0; i < item.Length; i++)
+    {
+        value += item[i];
+    }
 
-            //Берется остаток от деления получившегося значения на число ячеек в таблице 
-            return value % size;
-        }
+    //Берется остаток от деления получившегося значения на число ячеек в таблице 
+    return value % size;
+}
     }
 }
